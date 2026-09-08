@@ -1,0 +1,9 @@
+package org.doit.ik;
+
+import org.springframework.web.bind.annotation.GetMapping;
+
+
+public class ScottController {
+@GetMapping(value="/scott/dept")
+
+}

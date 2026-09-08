@@ -1,0 +1,50 @@
+package org.doit.ik;
+
+import org.doit.ik.domain.scott.DeptDTO;
+import org.doit.ik.mapper.scott.DeptMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.extern.log4j.Log4j;
+
+@RestController
+@Log4j
+@RequiredArgsConstructor
+public class ScottRestController {
+	//@Autowired
+	@Setter(onMethod=@__({@Autowired}))
+	private DeptMapper deptMapper;
+	
+	// http://localhost/scott/dept/new + POST 부서추가요청
+	// @RequestMapping(value="/scott/dept", method=RequestMethod.POST)
+	@PostMapping(value="/scott/dept/new")
+	public ResponseEntity<String> insertDept(@RequestBody DeptDTO dto){
+		log.info("🤩❤️❤️ ScottRestController.insertDept()...");
+		int rowCount = this.deptMapper.insertDept(dto);
+		return rowCount == 1 
+				? new ResponseEntity<String>("SUCCESS", HttpStatus.OK) 
+				: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR); 
+	}
+	
+
+	/* @PostMapping(value="/scott/dept/delete") */
+	@DeleteMapping("/scott/dept/{변수depno}")
+	public ResponseEntity<String> deleteDept(@PathVariable("deptno") int deptno){
+		log.info("🤩❤️❤️ ScottRestController.deleteDept()...: " + deptno);
+		int rowCount = this.deptMapper.deleteDept(deptno);
+		return rowCount == 1 
+				? new ResponseEntity<String>("SUCCESS", HttpStatus.OK) 
+				: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR); 
+	}
+	
+	
+	
+}

@@ -1,0 +1,16 @@
+package org.doit.ik.domain.scott;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+@Builder
+public class DeptDTO {
+	
+	private int deptno;
+	private String dname;
+	private String loc;
+
+}

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.doit.ik.mapper.scott.EmpMapper">
+	<!--ArrayList<EmpDTO> selectEmp() -->
+	<select id="selectEmp"
+		resultType="org.doit.ik.domain.scott.EmpDTO">
+		SELECT *
+		FROM emp
+		ORDER BY deptno ASC
+	</select>
+	
+<select id="selectEmp" resultType="org.doit.ik.domain.scott.EmpDTO">
+	SELECT * FROM emp
+	<if test="array != null and array.length > 0">
+	<where>
+	 
+	<foreach collection="array" item="deptno" open="deptno IN (" close=")" separator=","></foreach>
+	</where>
+	</if>
+</select>
+<!-- 챗GPT  [2]  더 좋은 코딩, 안전한 코딩
+   <select id="selectEmp"
+        resultType="org.doit.ik.domain.scott.EmpDTO">
+
+    SELECT empno,
+           ename,
+           job,
+           mgr,
+           hiredate,
+           sal,
+           comm,
+           deptno
+    FROM emp
+
+    <where>
+        <if test="array != null and array.length > 0">
+            deptno IN
+            <foreach collection="array"
+                     item="deptno"
+                     open="("
+                     separator=","
+                     close=")">
+                #{deptno}
+            </foreach>
+        </if>
+    </where>
+
+    ORDER BY deptno, empno
+
+</select>
+    -->
+   <!--  챗GPT  [1]
+    <select id="selectEmp"
+            resultType="org.doit.ik.domain.scott.EmpDTO">
+
+        SELECT empno,
+               ename,
+               job,
+               mgr,
+               hiredate,
+               sal,
+               comm,
+               deptno
+        FROM emp
+        WHERE deptno IN
+        <foreach collection="array"
+                 item="deptno"
+                 open="("
+                 separator=","
+                 close=")">
+            #{deptno}
+        </foreach>
+        ORDER BY deptno, empno
+
+    </select>
+    -->
+
+
+</mapper>  
+
+
+ 

@@ -1,0 +1,16 @@
+package org.doit.ik;
+
+import org.doit.ik.mapper.scott.DeptMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j;
+
+@RestController
+@Log4j
+@RequiredArgsConstructor
+public class ScottRestController {
+	//@Autowired
+	private final DeptMapper deptMapper;
+}

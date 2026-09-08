@@ -1,0 +1,12 @@
+package org.doit.ik;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+
+public class ScottController {
+	/*@RequestMapping(value="/time", method = RequestMethod.GET) 와 똑같은 의미*/
+	@GetMapping(value="/scott/dept")
+
+}

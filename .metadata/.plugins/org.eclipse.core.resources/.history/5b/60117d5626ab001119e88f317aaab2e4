@@ -1,0 +1,14 @@
+1.SL00_TEMPLATE -> SL01_MVC 프로젝트 복사
+2. 부서 정보를 조회
+/scott/dept 요청-> WEB-INF/views/scott/dept.jsp 응답
+1)home.jsp
+<a href="/scott/dept">부서정보 조회</a>
+
+2)ScottController
+@GetMapping(value="/scott/dept")
+public String dept(){
+
+}
+
+3) /scott/dept.jsp
+4) DeptDTO 생성

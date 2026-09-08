@@ -1,0 +1,17 @@
+package org.doit.ik;
+
+import org.doit.ik.mapper.TimeMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import lombok.extern.log4j.Log4j;
+
+@Controller
+@log4j
+
+public class TimeMybatisController {
+	
+	@Autowired
+	TimeMapper timeMapper;
+	
+}

@@ -1,0 +1,3 @@
+1.SL00_TEMPLATE -> SL01_MVC 프로젝트 복사
+2. 부서 정보를 조회
+/scott/dept 요청-> WEB-INF/views/scott/dept.jsp 응답

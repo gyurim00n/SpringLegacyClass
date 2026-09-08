@@ -1,0 +1,34 @@
+package org.doit.ik;
+
+import org.doit.ik.mapper.TimeMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import lombok.extern.log4j.Log4j; 
+
+@Controller
+@Log4j
+public class TimeMybatisController {
+	
+	@Autowired
+	TimeMapper timeMapper;
+	
+	@RequestMapping(value = "/time", method = RequestMethod.GET)
+	public String time(Model model ) {
+		
+		log.info("🤩 TimeMybatisController.time()...");
+		
+		String currentTime = this.timeMapper.getTime();
+		model.addAttribute("currentTime", currentTime);
+		// return "/WEB-INF/views/time.jsp"
+		return "time";
+	}
+
+}
+
+
+
+

@@ -1,0 +1,16 @@
+package org.doit.ik.mapper.scott;
+
+import java.util.ArrayList;
+
+import org.doit.ik.domain.scott.DeptDTO;
+
+public interface DeptMapper {
+	//[1]부서조회
+	ArrayList<DeptDTO> selectDept();
+
+	//[2]부서 추가
+	int insertDept(DeptDTO dto);
+	
+	//[3] 부서 삭제
+	int deleteDept(@Param("deptno")int deptno);
+}
