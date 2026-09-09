@@ -1,2 +1,0 @@
-#Tomcat publish data
-#Tue Sep 08 17:16:49 GMT+09:00 2026

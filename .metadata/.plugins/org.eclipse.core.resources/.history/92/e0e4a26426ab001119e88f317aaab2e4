@@ -1,7 +1,0 @@
-package org.doit.ik.domain;
-
-public class DeptDTO {
-	private int deptno;
-	private String dname;
-	private String loc;
-}

@@ -22,6 +22,7 @@
 	</beans:bean>
 	
 	<context:component-scan base-package="org.doit.ik" />
+	
 	<!--  Tiles  -->
     <beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
       <beans:property name="definitions">
@@ -36,6 +37,5 @@
       <beans:property name="order" value="1" />
     </beans:bean>
    
-	
 	
 </beans:beans>

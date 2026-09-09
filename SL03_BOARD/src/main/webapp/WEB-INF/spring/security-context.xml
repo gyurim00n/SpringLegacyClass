@@ -15,5 +15,4 @@
    <security:authentication-manager> 
    </security:authentication-manager>
 
-
 </beans>
