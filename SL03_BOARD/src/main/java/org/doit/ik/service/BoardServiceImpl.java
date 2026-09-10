@@ -40,4 +40,10 @@ public class BoardServiceImpl implements BoardService{
 		log.info("❤️BoardServiceImple.remove()...bno:" + bno);
 		return this.boardMapper.delete(bno) == 1;
 	}
+
+	@Override
+	public boolean modify(BoardVO boardVO) {
+		log.info("❤️BoardServiceImple.modify()...");
+		return this.boardMapper.update(boardVO) == 1;
+	}
 }

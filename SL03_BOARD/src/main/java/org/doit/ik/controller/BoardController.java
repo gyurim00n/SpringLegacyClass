@@ -56,11 +56,12 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	// /board/get?
+	// /board/get?bno=4
+	// /board/modify?bno=4
 	//[3]
-	@GetMapping(value = "get")
+	@GetMapping(value = {"get", "modify"})
 	public void get(Model model, @RequestParam("bno") Long bno) { //보이드면 요청url과 같음
-		log.info("😂 BoardController.list()...GET bno : " + bno);
+		log.info("😂 BoardController.get&modify()...GET bno : " + bno);
 		BoardVO boardVO = this.boardService.get(bno);
 		model.addAttribute("boardVO", boardVO);
 		/* return "/board/list"; */
@@ -85,4 +86,24 @@ public class BoardController {
 			
 			//return "//board/get" - > get.jsp //보이드라 줘서 겟매핑의 주소와 같다 
 		}	
+		
+	
+		//[2-2]/board/register + POST 수정 요청: 컨트롤러 메서드 선언
+		@PostMapping(value = "modify")
+		public String modify(BoardVO boardVO, RedirectAttributes rttr) { //커맨드객체 파라미터
+			log.info("😂 BoardController.modify()...POST");
+			log.info("~~~" + boardVO);
+			//포워딩
+			if(this.boardService.modify(boardVO)) {
+				rttr.addFlashAttribute("result", "SUCCESS");
+			}
+			
+			/* rttr.addAttribute("result", boardVO.getBno()); list.jsp?result=*/
+			rttr.addAttribute("bno", boardVO.getBno());
+			
+			//리다이렉트가 될 때 전달되기 위한 파라미터를 갖고간다. 
+			//리다이렉트 
+			return "redirect:/board/get";
+		}
+	
 }

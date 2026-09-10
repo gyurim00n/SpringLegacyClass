@@ -16,5 +16,8 @@ public interface BoardService {
 	
 	//[4]
 	boolean remove(Long bno);
+
+	//[5] 게시글 수정
+	boolean modify(BoardVO boardVO);
 	
 }

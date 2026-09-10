@@ -22,4 +22,6 @@ public interface BoardMapper {
 	
 	//[4]게시글 삭제
 	int delete(@Param("bno") Long bno);
+
+	int update(BoardVO boardVO);
 }

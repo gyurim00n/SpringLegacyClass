@@ -68,7 +68,13 @@ $(function(){
 		//data-oper = "modify"
 		let operation = $(this).data("oper");
 		if(operation=="modify"){
-			//작성자 확인...
+			// location.href = /board/modify?bno=2
+
+			formObj.attr({
+				"action": "/board/modify",
+				"method": "get"
+			})
+			.submit();
 		}else if(operation=="remove"){
 			//작성자 확인 X
 			if(confirm("정말 삭제하시겠습니까?")){
@@ -81,9 +87,45 @@ $(function(){
 			}//if
 		}else if(operation=="list"){
 			
+			formObj.attr({
+				"action": "/board/list",
+				"method": "get"
+			})
+			.empty()//폼(form) 내부에 남아 있는 기존 입력 필드나 검색 조건(input, hidden 등)을 모두 지우고 깨끗한 상태로 제출하기 위해서 넣은 것입니다.
+			.submit();
 		}
 		
+		
+		
+	
 	});
+	
+	
+	
+	//수정이 완료되 후 경고창(모달창) 띄우는 코딩 추가 
+	/* var result= '<c:out value="${param.result}" />'; */
+	var result= '<c:out value="${result}" />';
+
+	checkModal(result);
+	
+	history.replaceState({}, null, null);
+	
+	function checkModal(result){
+		/* if(parseInt(result)> 0){
+			
+			alert(`\${result} 번이 등록되었습니다.`);
+		}//if
+		 */
+		if(result == "SUCCESS"){
+			
+			alert(`${param.bno}번이 수정되었습니다`);  //   ?bno=21  EL
+			return;
+		}
+		
+	}//checkmodal
+	
+	
+	
 	
 	
 })

@@ -1,0 +1,63 @@
+1.SL03_BOARD  ->SL03_BOARD2_PAGINATION ->SL03_BOARD3_SEARCH 프로젝트 복사
+검색기능 추가.
+
+2. sqld: 
+DESC tbl_board;
+BEGIN
+    FOR i IN 1 .. 158
+    LOOP 
+      INSERT INTO tbl_board (bno, title, content, writer)
+      VALUES (seq_board.nextval, '스프링-'||i, '스프링-'||i, '홍길동');
+    END LOOP;  
+END;
+
+
+BEGIN
+    FOR i IN 1 .. 158
+    LOOP 
+      IF MOD(i,5)=0 OR MOD(i, 17)=0 THEN
+        UPDATE tbl_board
+        SET title = '자바-' || i        
+        WHERE bno = i;
+      END IF; 
+    END LOOP;  
+END;
+COMMIT;    
+
+
+3. 게시판 검색
+1) 단일항목 검색: 제목(t) 내용(c) 작성자(w)
+2) 다중 항목 검색: 제목+내용("tc") 
+			, 제목닥성자 tw, 
+			제목+내용+작성자tcw 동적쿼리생성
+
+
+4.검색조건(type) : [select], checkbox
+검색어 keyword :input
+
+
+5. mybatis에서 동적 sql 작성
+1)검색기능 x 목록조회 sQL 
+<![CDATA[
+		
+		SELECT bno, title, content, writer, regdate, updatedate
+     	FROM (
+            SELECT /*+INDEX_DESC(tbl_board pk_tblboard_bno )*/
+                   rownum rn, bno, title, content, writer, regdate, updatedate
+            FROM tbl_board 
+            WHERE
+            	title Like '%자바%' -- 제목검색조건
+            	content Like '%자바%' -- 내용
+            	title Like '%자바%' OR content Like '%자바%'
+            AND rownum <= #{pageNum} * #{amount}
+           )
+     	WHERE rn > (#{ pageNum } - 1) * #{ amount }
+		
+	 ]]>
+	 
+	 
+6.BoardMapper.xml 수정
+
+7.단위 테스트
+
+8. list.jsp 검색 부분 추가

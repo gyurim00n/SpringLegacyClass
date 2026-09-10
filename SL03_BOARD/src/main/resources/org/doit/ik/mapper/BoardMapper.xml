@@ -54,11 +54,20 @@
 	</select>
 	
 	
-	<!--int delte(@Param("bno") Long bno);  -->
+	<!--booelan delete(boardVO) -->
 	<delete id="delete">
 	DELETE FROM tbl_board
+	
 	WHERE bno = #{bno}
 	
 	</delete>
+	
+	<update id="update">
+	UPDATE tbl_BOARD
+	SET title = #{title}, 
+		content = #{content},
+		updatedate = SYSDATE
+	WHERE bno = #{bno} <!--   == boardVo.getBno() -->
+	</update>
 
 </mapper>

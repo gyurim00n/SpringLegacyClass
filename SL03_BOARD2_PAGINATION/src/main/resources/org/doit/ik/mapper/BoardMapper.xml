@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.doit.ik.mapper.BoardMapper">
+	<!-- //[1]게시글 목록 List<BoardVO> getList(); -->
+	<!-- //<![CDATA[ ... ]]>의 역할 이 기호 안에 들어간 텍스트는 XML 파서가 문법 검사를 하지 않고, 순수한 
+		문자열(Character Data)로 그대로 통과시키라는 의미입니다. 따라서 > 나 < 같은 기호를 마음껏 안전하게 사용할 수 있습니다. -->
+	<!-- 1. 인덱스(Index) 활용 유도 (성능 최적화) 2. 동적 쿼리(WHERE절)를 붙이기 위한 뼈대 역할 -->
+	<select id="getList" resultType="org.doit.ik.domain.BoardVO">
+  
+	 <![CDATA[
+		 SELECT *
+		 FROM tbl_board
+		 WHERE bno > 0 
+		 ORDER BY bno DESC
+	 ]]>
+
+	</select>
+
+
+	<!-- [1-2] 게시글 목록+ 페이징 처리 O List<BoardVO> getListwithPaging(Criteria criteria); 
+		int getTotalCount(Criteria criteria); //총 레코드 수 -->
+	<!-- 주석이 아니라 오라클 데이터베이스에 실행 방법을 지시하는 옵티마이저 힌트(Hint)입니다. /*+ ... */ 형태로 작성되어 
+		일반 주석처럼 보이지만, 내부에 + 기호가 들어가면 오라클은 이를 데이터베이스 성능 최적화를 위한 명령어로 인식합니다. INDEX_DESC 
+		의미: 지정한 인덱스(pk_tblboard_bno)를 내림차순(Descending, 큰 수에서 작은 수 순서)으로 읽도록 강제합니다. 
+		사용 이유: 게시판은 최신 글(번호가 큰 것)이 맨 위에 와야 하므로, 전체 데이터를 무겁게 ORDER BY로 정렬하는 대신 이미 
+		정렬되어 있는 인덱스를 거꾸로 타서 가장 빠른 속도로 최신 데이터를 가져오기 위함입니다. -->
+	<select id="getListwithPaging"
+		resultType="org.doit.ik.domain.BoardVO">
+  
+	 <![CDATA[
+		
+		SELECT bno, title, content, writer, regdate, updatedate
+     	FROM (
+            SELECT /*+INDEX_DESC(tbl_board pk_tblboard_bno )*/
+                   rownum rn, bno, title, content, writer, regdate, updatedate
+            FROM tbl_board 
+            WHERE rownum <= #{ pageNum } * #{ amount }
+           )
+     	WHERE rn > (#{ pageNum } - 1) * #{ amount }
+		
+	 ]]>
+
+	</select>
+
+	<select id="getTotalCount" resultType="int">
+	 <![CDATA[
+		
+		SELECT COUNT(*)
+		FROM tbl_board
+		WHERE bno > 0
+		
+	 ]]>
+	</select>
+
+
+	<!-- 2. 게시글 쓰기 int insert(BoardVO boardVO) -->
+
+	<insert id="insert" parameterType="org.doit.ik.domain.BoardVO">
+		INSERT INTO tbl_board (bno,
+		title, content, writer)
+		VALUES (seq_board.NEXTVAL, #{title},
+		#{content}, #{writer})
+
+	</insert>
+
+
+	<!-- int insertSelectKey(BoardVO boardVO); -->
+	<insert id="insertSelectKey">
+		<selectKey order="BEFORE" resultType="long"
+			keyProperty="bno">
+			SELECT seq_board.nextval
+			FROM dual
+		</selectKey>
+		INSERT INTO tbl_board (bno, title, content, writer)
+		VALUES ( #{bno},
+		#{title}, #{content}, #{writer})
+	</insert>
+
+	<!-- BoardVO read(Long bno); -->
+	<select id="read" resultType="org.doit.ik.domain.BoardVO"
+		parameterType="long">
+		SELECT *
+		FROM tbl_board
+		WHERE bno = #{bno}
+		ORDER BY bno DESC
+
+	</select>
+
+
+	<!--booelan delete(boardVO) -->
+	<delete id="delete">
+		DELETE FROM tbl_board
+
+		WHERE bno = #{bno}
+
+	</delete>
+
+	<update id="update">
+		UPDATE tbl_BOARD
+		SET title = #{title},
+		content = #{content},
+		updatedate = SYSDATE
+		WHERE bno = #{bno} <!-- == boardVo.getBno() -->
+	</update>
+
+</mapper>
