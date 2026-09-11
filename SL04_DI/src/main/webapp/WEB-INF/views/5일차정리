@@ -1,0 +1,34 @@
+1.SL00_TEMPLATE -> SL04_DI
+
+2.실습: 스프링 DI
+1) o.d.i.di패키지
+ㄴRecord.java
+ㄴRecordImpl
+ㄴRecordView
+
+2) o.d.i.di.text 패키지
+ㄴEx01.java + main() 메서드
+
+3. 실습: application-context.xml 설정파일 대신에 자바코드를 사용하는 예제
+1) o.d.i.di2 패키지
+ㄴConfig.java 자바 파일을 설정파일로 사용
+2)o.d.i.di2.test 패키지
+ㄴEx03.java + main()메서드
+
+4.실습:
+1)o.d.i.di3패키지
+3)o.d.i.di3 test 패키지 
+ㄴEx04.java + main() 메서드
+
+5.실습:
+1)o.d.i.di4패키지
+3)o.d.i.di4 test 패키지 
+ㄴEx05.java + main() 메서드
+
+
+
+6 DI 복습 ㅁ문제
+1. 패ㅣ키지 d5추가 후 
+빈 객체 생성 + 의존주입 _ 컴포넌트 스캔
+ㄴapplication-context5.xml 
+ㄴConfig5 java

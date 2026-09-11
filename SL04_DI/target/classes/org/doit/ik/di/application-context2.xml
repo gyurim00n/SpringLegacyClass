@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+
+
+	<!-- XML 설정파일  + cONFIG.JAVA 설정 조합 1) 2) -->
+	<context:annotation-config>
+		<bean class="org.doit.ik.di2.Config"></bean>
+	</context:annotation-config>
+	
+
+	<!-- RecordImpl record = new RecordImpl(); -->
+	<bean id="record" class="org.doit.ik.di.RecordImpl" ></bean>
+
+	<!-- RecordViewImpl rvi = new RecordViewImpl(); 
+		rvi.setRecord(record);
+	-->
+	<!-- Setter 통해 주입받음. Setter DI
+	<bean id="rvi" class="org.doit.ik.di.RecordViewImpl" >
+	name="SetRecord" 는 set은 빼고 맨 앞글자는 소문자로 바꾼다. 그래서 Setter가 반드시 있어야한다.
+		<property name="record" ref="record"></property>
+	</bean>
+	 -->
+	 
+	 <bean id="rvi" class="org.doit.ik.di.RecordViewImpl" >
+		<property name="record">
+			<ref bean="record"/>
+		</property>
+	</bean>
+	
+	<!-- RecordViewImpl rvi = new RecordViewImpl(); 
+	
+	Constructor DI
+	-->
+	<!-- <bean id="rvi" class="org.doit.ik.di.RecordViewImpl" >
+		<constructor-arg ref="record" />
+	</bean> -->
+	
+	
+</beans>

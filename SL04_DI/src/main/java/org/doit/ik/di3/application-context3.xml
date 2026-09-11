@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- p104 @Autowird, @resource 어노테이션을 사용하기 위해서 빈 전처리기가 등록... -->
+	<context:annotation-config/>
+
+	<bean id="record" class="org.doit.ik.di3.RecordImpl3" ></bean>
+	<!--autowired는 이렇게 두개이상 지정해야되는게 생기면 뭘 해줘야되는지 모른다. Resource사용해야함.  -->
+	<!-- <bean id="record2" class="org.doit.ik.di3.RecordImpl3" ></bean> -->
+	
+	
+	<!-- p104 자동으로 의존성 주입(DI) 처리 -->
+	 
+	 <bean id="rvi" class="org.doit.ik.di3.RecordViewImpl3" ></bean>
+
+</beans>
