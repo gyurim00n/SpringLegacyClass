@@ -1,0 +1,15 @@
+6일차 aOP 정리
+Aspect Oriented Programming 
+aspecT: 공통 기능 
+1) aop 개념
+2) aOP 반드시 알아야 할 용어 5가지
+3) 위빙 3가지 방법
+4)AOP 스프링에서 적용하는 3가지 ㅏㅇ법
+1) 스프링 aop api
+2) xml
+
+2)ㅈ실습
+  1)  org.doit.ik.aop 패키지        
+        ㄴ Calculator.java 인터페이스 
+        ㄴ CalculatorImpl.java 클래스 
+        ㄴ Ex01.java 클래스  + main(){}

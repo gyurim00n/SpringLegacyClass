@@ -1,0 +1,56 @@
+1.SL03_BOARD_SEarch  ->SL05_BOARD2_REPLYL03_BOARD3_SEARCH 프로젝트 복사
+
+2.Rest 방식을 가장 많이 상요한느 형태 :ㅣ브라우저 ,모바일, 앱 등 ajax 이용한 호출
+
+.3 실습
+ㄴ게시판 (board) 게시글= 답글(reply) 기능 작성]
+
+
+
+SL05_BOARD4_REPLY
+
+create table tbl_reply (
+  rno number(10,0), 
+  bno number(10,0) not null,
+  reply varchar2(1000) not null,
+  replyer varchar2(50) not null, 
+  replyDate date default sysdate, 
+  updateDate date default sysdate
+);
+
+create sequence seq_reply;
+
+alter table tbl_reply add constraint pk_reply primary key (rno);
+
+alter table tbl_reply  add constraint fk_reply_board  
+foreign key (bno)  references  tbl_board (bno); 
+
+1.	o.d.i.domain ReplyVO.java
+2.	
+	ReplyMapper.java
+ 	ReplyMapper.xml
+ 
+3. 
+	o.d.i.service.ReplyService.java 인터페이스
+	o.d.i.service.ReplyServiceImpl.java 크ㅜㄹ래스
+ 
+ 4. controller.ReplyController + 요청처리 컨트롤러 메서드
+ ***댓글 등록 : "/replies/new" + POST 
+ ***댓글 상세보기 : "/replies/:rno" +  GET 
+ ***댓글 삭제 : "/replies/:rno" + DELETE 
+ ***댓글 수정 : "/replies/:rno" + PUT or Patch
+ ***댓글 페이징 : "/replies/pages/:bno/:page" + GET 댓글 페이징 처리 (아직 안함)
+ 							게시글번ㄴ호 현재페이지번호
+ 
+ 5. board/get.jsp  + js ajax(reply.js) 
+ 
+ 댓글 목록 클릭 ajax 처리
+ 댓글 추가 ajax 처리
+ 
+하나의 댓글 클릭 이벤트 처리 
+
+6)댓글도 페이징 처리 X
+[1] 2 3 4 5 ...
+
+
+7)아이디 중복 체크??

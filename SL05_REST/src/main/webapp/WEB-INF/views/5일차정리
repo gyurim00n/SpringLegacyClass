@@ -56,3 +56,35 @@
       </dependency>
       
   	(3)테스트할 때: GSON		자바 객체 -> json 타입으로 변환...
+  	
+ 5.SampleController.java 추가
+ 2026-09-14
+ 6.ResponseEntity 타입 = 데이터 + HTTP 헤더의 상태 메세지
+ ㄴREST 방식 호출 = 데이터 자체 전송 방식 + 정상적/비정상적 처리 유무 정보도 함께 전송
+ ㄴcheck 컨트롤도 메서드
+ 
+ 7.@Pathvariable 어노테이션
+ http://localhost/sample/{sno} + GET/PUT/DELETE 
+ ㄴ요청 URL 자체에 데이터를 식별할 수 있는 변수를 퐇마한 경우 그 값을 얻어올 때 사용하는 어노테이션
+ ㄴhttp://localhost/product/{cat}/{pid}
+ ㄴgetPath() 컨트롤러 메서드
+ ㄴhttp://localhost/sample/product/bags/1000
+ 
+ 8.클라이언트 - (비동기요청(ajax) -> 서버요청
+ json데이터 		요청 			json 데이터를 자바 객체/변수 변환
+ 									다양한 타입 변환
+ 									@RequestBody 어노테이션
+ ㄴo.d.i.domain.Ticked 클래스 선언
+ 
+ 									
+ {
+ 	"tno":123,
+ 	"owner" : "admin",
+ 	"grade": "A"
+ }
+ 
+ 
+ C :post
+ R	:get
+ U	:put
+ D	:delete

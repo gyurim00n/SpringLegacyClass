@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.doit.ik.mapper.ReplyMapper">
+	<!-- 	//[1]댓글쓰기 int insert(ReplyVO replyVO); -->
+	<insert id="insert">
+		INSERT INTO tbl_reply (rno, bno, reply, replyer)
+		VALUES (seq_reply.NEXTVAL, #{bno},#{reply}, #{replyer})
+	
+	</insert>
+	
+	
+	
+	<!-- //[2] 댓글 조회: 게시글 번호(bno)를 조회해서 댓글 목록 반환 ReplyVO read(Long rno); -->
+	<select id="read" resultType = "org.doit.ik.domain.ReplyVO">
+	SELECT *
+	FROM tbl_reply
+	WHERE rno = #{rno}
+	
+	</select>
+	
+	<!-- //[3]댓삭 int delete(Long rno); -->
+	<delete id="delete">
+	DELETE FROM tbl_reply
+	WHERE rno = #{rno}
+	</delete>
+	
+	
+	<!--//[4]댓글 수정 int update(ReplyVO replyVO); -->
+	<update id="update">
+	UPDATE tbl_reply
+	SET	reply = #{reply}, updateDate = SYSDATE
+	WHERE rno = #{rno}
+	</update>
+	
+	<!-- //[5]댓글 목록
+	List<ReplyVO> getListWithPaging(@Param("cri") Criteria cri, @Param("bno") Long bno); -->
+	<select id="getListWithPaging" resultType = "org.doit.ik.domain.ReplyVO">
+	SELECT rno, bno, reply, replyer, replyDate, updateDate
+	FROM tbl_reply
+	WHERE bno = #{bno}
+	ORDER BY rno ASC
+	
+	</select>
+	
+	
+	<!-- int getCountByBno(Long bno); -->
+	<select id="getCountByBno">
+	<![CDATA[
+		SELECT COUNT(rno)
+		FROM tbl_reply
+		WHERE bno = #{bno}]]>
+	</select>
+	
+</mapper>
