@@ -1,0 +1,10 @@
+1. SL07_MYBATIS3 -> SL07_MYBATIS4 프젝 복사
+
+2.Mybatis 실습4
+	ㄴDeptEmpSalgradeDTO -> <resultMap> 직접 매핑
+		ㄴDeptDTO		1:1		연관관계
+		ㄴEmpDTO			1:N		연관관계
+			ㄴSalgradeDTO	1:1		연관관계
+	
+	매퍼파일 - resultMap 매핑
+	

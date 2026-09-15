@@ -1,0 +1,28 @@
+1.SL00_TEMPLATE -> SL07_MYBATIS 프젝 복사
+ㄴhttps://mybatis.org/mybatis-3/ko/index.html
+
+2. p563	Mybatis 연동지원
+	1)pom.xml 확인
+		ㄴmybatis-spring 모듈 추가
+	
+	2)SqlSessionFactoryBean을 이용해서 SqlSessionFactory 설정
+		ㄴ스프링 + mybatis를 연동 처리하는 빈 객체
+		ㄴroot-context.xml
+			ㄱ.<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig"> 커넥션풀
+			ㄴ.<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+			ㄷ.<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean"> 
+	3)트랜잭션 처리 설정
+				<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	4)Mybatis 사용하여 DAO 구현
+		1)SqlSession 이용 구현 	p567
+			SqlSessionTemplate을 이용해서 DAO구현
+		2)매퍼 동적 생성 이용 구현	p569
+			자동 매퍼 생성 기능을 이용한 DAO 구현
+		
+3. 실습
+	1)o.d.i.domain.DeptDTO.java
+	2)ScottController.java
+	3)/scott/dept.jsp
+	4)mapper.DeptMapper.java
+	src/main/resources/mybatis/DeptMapper.xml
+	=>o.d.i.mapper.DeptMapperDao.java

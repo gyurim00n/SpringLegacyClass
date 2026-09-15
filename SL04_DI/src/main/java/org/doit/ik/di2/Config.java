@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
 @Configuration
-
+//@Mapperscan
 //@ImportResource("classpath:org/doit/ik/di/application-context.xml")
 //@import Config2.class 자바 설정파일을 조립할떄 사용하는 어노테이션
 @ComponentScan(basePackages = "ord.doit.ik.di4")

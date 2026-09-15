@@ -1,0 +1,96 @@
+1. SL07_MYBATIS3 -> SL07_MYBATIS4 프젝 복사
+
+2.Mybatis 실습6 == spring boot JPA Entity 선언...
+
+
+1) DeptEmpSalgradeDTO.java 삭제
+2)	public class DeptDTO 에서 이거 추가:
+	//1-N 연관 관계 
+	private List<EmpDTO> empList;
+	
+
+	1) 현재 DTO 구조를 보면 관계가 2단계
+   DeptDTO
+    └─ List<EmpDTO> empList
+          └─ SalgradeDTO salgradeDTO
+    따라서 
+    MyBatis에서도 Dept → Emp(1:N) → Salgrade(1:1) 구조로 
+    resultMap을 구성하는 것이 좋습니다.
+
+   (1) DeptDTO의 empList를 매핑해야 합니다.
+   (2) EmpDTO의 salgradeDTO를 매핑해야 합니다.
+   (3) resultType="DeptDTO"
+
+2) 전체 관계
+  
+  
+                DeptDTO
+          ┌─────────────┐
+          │ deptno      │
+          │ dname       │
+          │ loc         │
+          │             │
+          │ empList     │──────────────┐
+          └─────────────┘              │
+                                       │ 1:N
+                                       ▼
+                                  ┌─────────────┐
+                                  │ EmpDTO      │
+                                  ├─────────────┤
+                                  │ empno       │
+                                  │ ename       │
+                                  │ job         │
+                                  │ mgr         │
+                                  │ hiredate    │
+                                  │ sal         │
+                                  │ comm        │
+                                  │ deptno      │
+                                  │             │
+                                  │ salgradeDTO │──────┐
+                                  └─────────────┘      │
+                                                       │ 1:1
+                                                       ▼
+                                                  ┌───────────┐
+                                                  │SalgradeDTO │
+                                                  ├───────────┤
+                                                  │ grade     │
+                                                  │ losal     │
+                                                  │ hisal     │
+                                                  └───────────┘
+                                                  
+ 3) 매퍼파일을 보면  여기서 중요한 점은 중첩 조회(Nested Select) 방식이다.   
+ 4) 
+    getDept()
+      ↓
+   DEPT 테이블에서 부서 조회
+      ↓
+   deptno = 10
+      ↓
+   getEmpOfDept(10) 호출
+      ↓
+   EMP + SALGRADE 조회
+      ↓
+   List<EmpDTO>에 저장         
+   
+ 4-2) MyBatis가 내부적으로 다음과 같은 형태로 객체를 만들어 줍니다.    
+   DeptDTO
+    ├─ deptno = 10
+    ├─ dname = ACCOUNTING
+    ├─ loc = NEW YORK
+    └─ empList
+         ├─ EmpDTO
+         │    ├─ empno = 7782
+         │    ├─ ename = CLARK
+         │    └─ salgradeDTO
+         │         ├─ grade = 4
+         │         ├─ losal = 2001
+         │         └─ hisal = 3000
+         │
+         ├─ EmpDTO
+         │    └─ ...
+         │
+         └─ ...                           
+
+  5) 중요한 포인트는 
+    collection은 List를 매핑할 때
+    ,  association은 객체 하나를 매핑할 때 사용한다는 것      

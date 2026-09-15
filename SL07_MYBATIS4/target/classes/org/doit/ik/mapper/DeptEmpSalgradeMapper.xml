@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="org.doit.ik.mapper.DeptEmpSalgradeMapper"> 
+ 
+ <resultMap type="DeptEmpSalgradeDTOAlias" id="deptEmpResultMap">
+<!-- 1:1 DeptDTO  -->
+	<association property="deptDTO" javaType="org.doit.ik.domain.DeptDTO">
+		<id property="deptno" column="deptno"/>
+		<result property="dname" column="dname"/>
+	
+	</association>
+	<!-- 1:N EmpDTO  
+		1:1 중첩:SalgradeDTO
+		-->
+	<collection property="empDTO" ofType="org.doit.ik.domain.EmpDTO">
+		<id property="empno" column="empno" />
+        <result property="ename" column="ename" />
+        <result property="job" column="job" />
+        <result property="hiredate" column="hiredate" />
+        <result property="sal" column="sal" />
+        
+		<!-- 1:1 중첩:SalgradeDTO -->
+		<association property="salgradeDTO"  javaType="org.doit.ik.domain.SalgradeDTO">
+			<result property="grade" column="grade" />
+		</association>
+	</collection>
+
+ </resultMap>
+ 
+ <!--  List<> getDeptEmpInfo(); -->
+ <select id="getDeptEmpInfo" resultMap="deptEmpResultMap">
+ 
+ SELECT d.deptno, dname, empno, ename, job, hiredate, sal, grade
+    FROM emp e JOIN dept d      ON d.deptno = e.deptno
+               JOIN salgrade s ON sal BETWEEN losal AND hisal
+    ORDER BY d.deptno ASC
+ </select>
+
+ </mapper>

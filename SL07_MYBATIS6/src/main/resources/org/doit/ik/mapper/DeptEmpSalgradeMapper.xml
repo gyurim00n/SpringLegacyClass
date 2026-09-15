@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.doit.ik.mapper.DeptEmpSalgradeMapper">
+
+<!-- //1.모든 부서 정조 보회 List<DeptDTO> getDept(); -->
+	<resultMap type="org.doit.ik.domain.DeptDTO" id="deptResultMap">
+		<id property="deptno" column="deptno"/>
+		<result property="dname" column="dname"/>
+		<result property="loc" column="loc"/>
+		
+		<!-- DeptDTO:EmpDTO = 1:N 연관관계 -->
+		<collection property="empList" ofType="org.doit.ik.domain.EmpDTO" select="getEmpOfDept" column="deptno"></collection>
+	</resultMap>
+	
+	<select id="getDept" resultMap="deptResultMap">
+		SELECT deptno, dname, loc
+		FROM dept 
+		ORDER BY deptno DESC
+	</select>
+
+
+	<!-- //2. 각 해당 부서원 정보를 조회 List<EmpDTO> getEmpOfDept(int deptno); -->
+	<resultMap type="org.doit.ik.domain.EmpDTO" id="empResultMap">
+	<!-- 1. 사원정보 -->
+	<id property="empno" column="empno"/>
+
+        <result property="ename" column="ename"/>
+        <result property="job" column="job"/>
+        <result property="mgr" column="mgr"/>
+        <result property="hiredate" column="hiredate"/>
+        <result property="sal" column="sal"/>
+        <result property="comm" column="comm"/>
+        <result property="deptno" column="deptno"/>
+	<!-- 1:1 등급 연관관계 -->
+	
+		<association property="salgradeDTO" javaType="org.doit.ik.domain.SalgradeDTO">
+		
+			<result property="grade" column="grade"/>
+			<result property="losal" column="losal"/>
+			<result property="hisal" column="hisal"/>
+		</association>
+	</resultMap>
+	
+	<select id="getEmpOfDept" resultMap="empResultMap">
+		SELECT e.empno,
+               e.ename,
+               e.job,
+               e.mgr,
+               e.hiredate,
+               e.sal,
+               e.comm,
+               e.deptno,
+               s.grade,
+               s.losal,
+               s.hisal
+        FROM emp e
+        JOIN salgrade s
+          ON e.sal BETWEEN s.losal AND s.hisal
+        WHERE e.deptno = #{deptno}
+        ORDER BY e.empno ASC
+	</select>
+
+
+
+</mapper>
+ 
