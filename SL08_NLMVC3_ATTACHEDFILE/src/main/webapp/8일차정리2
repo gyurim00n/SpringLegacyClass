@@ -1,0 +1,27 @@
+1. SL08_NLMVC2 - SL08_NLMVC3_ATTACHeDFILE 프로젝트 복사
+
+2.p438 (445검색) 파일 업로드
+
+
+1) pom.xml
+	<dependency>
+          <groupId>commons-fileupload</groupId>
+          <artifactId>commons-fileupload</artifactId>
+          <version>1.3</version>
+      </dependency>
+      
+2) servlet-context.xml
+<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+   	<!-- 최대 업로드 가능한 바이트 크기, -1 : 제한 없다 -->
+   	<beans:property name="maxUploadSize" value="-1"></beans:property>
+   	<beans:property name="maxInMemorySize" value="10240"></beans:property>
+   	<beans:property name="defaultEncoding" value="UTF-8"></beans:property>
+   </beans:bean>
+	
+	
+
+3. 업로드된 파일데이터에 접근하는 방법 5가지
+1) 4번째인 커맨드 객체를 통한 업로드 파일 사용... 방법
+noticeReg.jsp
+<input type="file" id="txtFile" name="file 이름동일한 이름으로" />
+NoticeVO.java

@@ -1,0 +1,21 @@
+1. SL08_NLMVC - SL08_NLMVC2 프로젝트 복사
+공지사항 목록
+공지사항 상세보기
+
+2, 공지사항 컨트롤러: o.di.i.CustomerConroller.java
+ㄴ컨트롤러 메서드 /customer/notice.htm
+ㄴ컨트롤러 메서드 /customer/noticeDetail.htm
+
+@Controller		CustomerController.java
+@Repository - NoticeDao.java
+
+3.공지사항 쓰기: 
+	notice.jsp 쓰기 버튼 /customer/noticeReg.htm 요청 + GET
+	ㄴ컨트롤러 메서드 : 리턴 자료형 noticeReg(){}
+	
+4. 공지사항 수정/삭제
+	1)공지사항 상세보기
+
+
+5. 파일업로드 + 공지사항 쓰기
+	
