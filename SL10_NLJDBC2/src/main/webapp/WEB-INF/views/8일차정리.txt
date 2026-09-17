@@ -1,0 +1,69 @@
+1.SL00_Template ->SL08_NLMVC 프로젝트 복사
+
+2.패키지 확인
+1)org.doit.ik.domain 패키지 추가 - VO, DTO
+2)org.doit.ik.controller 패키지 추가 - controller
+3)org.doit.ik.persistence 패키지 추가 - DAO, Mapper
+4)org.doit.ik.service 패키지 추가 - Service
+
+
+3. sqld scott 테이블 생성:
+CREATE TABLE NOTICES --공지사항 게시판
+(
+	"SEQ" VARCHAR2(10 BYTE), --글번호 "컬럼명"
+	"TITLE" VARCHAR2(200 BYTE), --제목
+	"WRITER" VARCHAR2(50 BYTE), --작성자
+	"CONTENT" VARCHAR2(4000 BYTE), --내용
+	"REGDATE" TIMESTAMP (6), --등록일
+	"HIT" NUMBER, --조회수
+	"FILESRC" VARCHAR2(500 BYTE) --첨부파일
+);
+
+DROP TABLE "MEMBER"
+
+CREATE TABLE "MEMBER"
+(	
+    "ID" VARCHAR2(50 BYTE), --회원
+    "PWD" VARCHAR2(50 BYTE), 
+    "NAME" VARCHAR2(50 BYTE), 
+    "GENDER" VARCHAR2(10 BYTE), 
+    "BIRTH" VARCHAR2(10 BYTE), 
+    "IS_LUNAR" VARCHAR2(10 BYTE), 
+    "CPHONE" VARCHAR2(15 BYTE), 
+    "EMAIL" VARCHAR2(200 BYTE), 
+    "HABIT" VARCHAR2(200 BYTE), 
+    "REGDATE" DATE
+);
+ 
+
+
+
+4. DAO service 파일
+ㄴservice
+	ㄴnewlecture폴더
+		ㄴdao 폴더
+			ㄴMemberDao.java //vo폴더에서 만들던거에서 복붙
+			ㄴNoticeDao.java	//vo폴더에서 만들던거에서 복붙
+		ㄴvo 폴더
+			ㄴMember.java
+			ㄴNotice.java
+			
+6. Spring MVC를 위한 빈프로젝트 파일 폴더 
+	ㄴwebContent
+		ㄴcss
+		:
+		ㄴindex.jsp
+		
+		
+확장자가 <servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<!-- <url-pattern>/</url-pattern> -->
+		<url-pattern>*.do</url-pattern>
+		<url-pattern>*.htm</url-pattern>
+	</servlet-mapping>
+	
+	
+7.정리
+/customer/notice.htm ->	NoticeConroller
+							ㄴ컨트롤러 메서드	
+		

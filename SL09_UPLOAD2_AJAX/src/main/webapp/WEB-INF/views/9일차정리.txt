@@ -1,0 +1,25 @@
+1. SL09_UPLOAD_CMR -> SL09_UPLOAD2_AJAX 복사
+2. 실습
+	1) views/ajax/upload.jsp
+	2)webapp/ajax/upload
+	3)AjaxUploadController.java
+	4)html에서 ajax 로 파일 업로드 하는 방법
+		(1)js 사용: js의 FormData + XMLHttpRequest
+		   jq 사용:	   FormData + $.ajax()	또는 	FormData + $.()
+		   
+[파일 업로드 시 고려할 사항]
+1.동일한 파일이 업로드 되는 경우
+	a.txt ->		a-3.txt
+	UUID_파일명
+	
+2.이미지 파일인 경우에는 원본 파일 용량이 큰 경우 섬네일 이미지를 생성해야 된다. pom.xml에 이거 있는지확인:
+<!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator -->
+      <dependency>
+         <groupId>net.coobird</groupId>
+         <artifactId>thumbnailator</artifactId>
+         <version>0.4.8</version>
+      </dependency>
+3. 하나의 폴더에 저장할 수 있는 파일의 갯수가 제한..
+해결)하위 폴더 생성
+	날짜...getFolder()
+4.

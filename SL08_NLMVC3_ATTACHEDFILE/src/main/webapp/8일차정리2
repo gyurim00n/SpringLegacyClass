@@ -25,3 +25,75 @@
 noticeReg.jsp
 <input type="file" id="txtFile" name="file 이름동일한 이름으로" />
 NoticeVO.java
+
+
+_______________________________________
+-2026-09-17
+_______________________________________
+1.파일 업로드	
+	1)<form></form> 태그 이용
+		ㄴ첨부파일 + 페이지 이동과 동시에 첨부파일을 업로드하는 방식
+		ㄴ<iframe><iframe> 화면 이동없이 첨부파일 업로드 가능.
+	
+	
+	2)ajax 이용해서 파일만 별도로 업로드
+
+
+2. API 활용
+	1) cos.jar 더이상 권장X
+	2) commons-fileupload: 가장 일반적으로 많이 사용되는 방법, 서블릿 3.0 이전에도 사용가능
+	   <!-- 3. fileupload -->
+      <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
+      <dependency>
+          <groupId>commons-fileupload</groupId>
+          <artifactId>commons-fileupload</artifactId>
+          <version>1.3</version>
+      </dependency>
+	3) 서블릿 3.0 이상부턴 자체적인 파일 업로드 API 지원
+		Tomcat 7.0 이상 (서블릿 3.0을 지원한다)
+		
+3.  multipartResolver 설정.
+ <!-- 반드시 주의할점!! id는 반드시 multipartResolver  -->
+   <!-- 스프링 MVC에서 전송되는 데이터를 변환하는 역할 -->
+   <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+   	<!-- 최대 업로드 가능한 바이트 크기, -1 : 제한 없다 -->
+   	<beans:property name="maxUploadSize" value="-1"></beans:property>
+   	<beans:property name="maxInMemorySize" value="10240"></beans:property>
+   	<beans:property name="defaultEncoding" value="UTF-8"></beans:property>
+   </beans:bean>
+
+4.form 태그 설정
+<form action="" method="post" enctype="multipart/form-data"></form>
+<dl class="article-detail-row">
+							<dt class="article-detail-title">첨부파일</dt>
+							<dd class="article-detail-data">
+								&nbsp;<input type="file" id="txtFile" name="file" />
+							</dd>
+						</dl>
+						
+5. 스프링에서 첨부파일을 사용하는 4가지 방법- (3) 커맨드객체 사용
+	1)NoticeVO.java	- 필드추가
+	//private MultipartFile file;
+	private CommonMultipartFile file;
+	2)
+CustomerConroller.java
+	ㄴ@PostMapping("/noticeReg")
+	컨트롤러 메서드(NoticeVO noticeVO){
+		if(첨부파일 있냐?){
+			1) 첨부파일 저장 t~To(파일객체)
+			2) noticeVO.setFilesrc(파일경로) 
+		}
+		
+		//공지사항 추가
+		noticeDao.insert(notivceVO);
+		
+	}
+____________________
+7.삭제시 첨부파일이 있는 경우는 첨푸파일도 함께 삭제..
+1)<a class="btn-del button" href="noticeDel.htm?seq=${noticeVO.seq}&filesrc=${noticeVO.filesrc }">삭제</a>
+2)삭제 컨트롤러 메서드 수정
+
+
+8.게시글 수정
+1)첨부파일 없는 경우:
+2_첨부파일
