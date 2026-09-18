@@ -1,0 +1,38 @@
+1. SL10_NLIDBC2 - SL11_NLTRANSACTION_TMANAGER_TEMPLAE 프로젝트 복사
+
+2. p511 전파방식(propagation)
+	1) 전파방식 ? 현재 진행중인 트랜잭션이 있을 때
+				새로운 트랜잭션이 시작할 경우
+					중첩된 트랜잭션을 어떻게 처리할 건지 결정하는 속ㄱ성.
+					
+3. 예)
+	@T
+	a()
+	[1 		2 	[3]			...		6X]
+				@T(p=R)
+				b(){
+					[4,5]
+				}
+				
+	실습)) insertAndPointUpOfMember
+		 공 등록 		+ 		포인트
+		 	1				2
+	실습) 전파 방식
+	//@T 
+	insertAndPointUpOfMember
+	[			@T insert()  @T insert()	]
+					1+2
+			 이유 ? 클래스 내의 메서드에서 다른 메서드를 호출하는 구조로는 AOP 방식으로
+           트랜잭션 처리는 되지 않는다. 
+   해결 ? insertAndPointUpOfMember() 메서드와 insert() 메서드를 
+          클래스를 다르게 분리.
+         MemberShipService.insertAndPointUpOfMember
+         MemberShipServiceImpl.java
+         
+         NOticeDaoImpl.insert()		
+	(1) NoticeDaoImpl.java
+	-@T insert() 수정: 공지사항 등록 + 포인트
+	-@T insertAndPointUpOfMember() : insert()	2번 호출 수정
+	
+	
+@T[ 1.update @T(RN)insert() @T(RN) insert()] -> 중첩 트랜잭션이일떄 하나 망하면 같이 망할지 결정
