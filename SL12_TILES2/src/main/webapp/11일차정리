@@ -1,0 +1,32 @@
+1. SL11_~isolation- SL12_TLES2 프로젝트 복사
+
+2.tiles 설정
+1)https://tiles.apache.org
+https://tiles.apache.org/download.html 여기서 해당되는ㄴ거 복사 
+
+근데 pom.xml에 이미 있다.
+
+
+servelet context에 있는  tiles관련 주석 풀기
+
+
+3,페이징 모듈러
+webapp 폴더 
+inc 폴더 : 모든 공통 부ㅜ분
+ㄴcustomer 곻ㅇ지사항 폴더
+	inc 폴더ㅣ - > include 폴더 공지사앟ㅇ 공통 부분
+		footer, header, layout jsp.//./.
+ㄴ joinus 폴더 
+	inc 폴더 - inc 폴더 	회원관리 공통 부분.
+	
+메인 내용만 content 부분남겨놓음.
+4. notice.jsㅔ 공지사항 목록 페잊 
+
+5. CustomerController.java
+JoinusController.java
+안에 있는 모든 컨트롤러 메서드의 jsp뷰를 -> 타일즈뷰 사용으로 수정...
+
+
+6.tiles.xml 수정
+
+7. 모든 jsp는 WEB-INF/views 폴더로 이동...

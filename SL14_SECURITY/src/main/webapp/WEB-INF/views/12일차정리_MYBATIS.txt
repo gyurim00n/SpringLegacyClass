@@ -1,0 +1,72 @@
+1.  SL13_MYBATIS -> SL14_SECURITY 프로젝트 복사
+
+2.   p654 Chapter16 스프링 시큐리티를 이용한 웹 보안
+
+	1. 보안 요구
+	1) 역할(ROLE) 종류 : ROLE_USER, ROLE_ADMIN, ROLE_MANAGER 등등
+	2) 경로별 접근 제한
+		1) 공지사항 쓰기 : 인증된 사용자만 접근 허용
+		/customer/noticeReg.htm->
+		2)공지사항 수정 삭제 : ㅇ인증된 사용자만 접근 허용 + 작성자
+		/customer/noticeEdit.htm -
+		/customer/noticeDel.htm -
+		3) 그외의 요청은 인증 x, 권한 x.  모두에게 허용.
+		
+	2. pom.xml 모듈 추가
+			<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-taglibs -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>	
+
+	3.시큐리티 관한 설정파일 : security-context.xml 
+	
+	4.web.xml에 663p 내용의 58번쨰줄 부터 추가 
+   <filter>
+      <filter-name>springSecurityFilterChain</filter-name>
+      <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+   </filter>
+   <filter-mapping>
+      <filter-name>springSecurityFilterChain</filter-name>
+      <url-pattern>/*</url-pattern>
+   </filter-mapping>   
+
+
+
+5. 서버 실행: 
+	<security:form-login/>
+</security:http>
+
+<security:authentication-manager>
+</security:authentication-manager>
+
+
+
+
+
+
+
+
+    
+ 
+     
+                  

@@ -1,0 +1,57 @@
+1.  SL12_TILES2 -> SL13_MYBATIS 프로젝트 복사
+
+2.   
+   ㄴ https://blog.mybatis.org/
+   ㄴ root-context.xml
+<!-- p84 -->
+    1) 커넥션 풀 설정 - 3가지 
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">	  
+	  <property name="driverClassName"	 value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
+	  <property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@localhost:1521/XEPDB1"></property>
+	  <property name="username" value="scott"></property>
+	  <property name="password" value="tiger"></property> 
+	</bean>
+	2) DataSource 객체
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+	  <constructor-arg ref="hikariConfig"></constructor-arg>
+	</bean>
+	
+	3) sqlSessionFactoryBean 빈 객체 
+	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+	  <property name="dataSource" ref="dataSource"></property>
+	  <property name="configLocation" value="classpath:org/doit/ik/mapper/mybatis-config.xml"></property>
+	</bean>
+	
+	  mybatis-config.xml 마이바티스 설정 파일	
+	4) 스캔 : org.doit.ik.mapper
+	<mybatis-spring:scan base-package="org.doit.ik.mapper"/>   
+
+ 3. org.doit.ik.persistence -> org.doit.ik.mapper 이동 
+     MemberDao.java  인터페이스 만 이동
+     NoticeDao.java     인터페이스 만 이동
+     
+     >> ~Impl.java 삭제.
+     
+ 4. src/main/resources 폴더 안에
+       ㄴ  org 폴더
+            ㄴ doit 폴더
+                ㄴ ik 폴더
+                    ㄴ mapper 폴더
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+ 
+     
+                  

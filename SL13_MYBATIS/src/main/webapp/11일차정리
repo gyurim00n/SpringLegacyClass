@@ -1,0 +1,42 @@
+1. SL13_~mybatis- SL12_TLES2 프로젝트 복사
+
+2. http//blog.mybatis.org
+	root context 
+		<!-- p84 -->
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<!-- p102 <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property> 
+			<property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:XE"></property> -->
+		<property name="driverClassName"
+			value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
+		<property name="jdbcUrl"
+			value="jdbc:log4jdbc:oracle:thin:@localhost:1521/XEPDB1"></property>
+		<property name="username" value="scott"></property>
+		<property name="password" value="tiger"></property>
+	</bean>
+
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="close">
+		<constructor-arg ref="hikariConfig"></constructor-arg>
+	</bean>
+
+
+	<!-- p91 -->
+	<bean id="sqlSessionFactoryBean"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="configLocation"
+			value="classpath:org/doit/ik/mapper/mybatis-config.xml"></property>
+	</bean>
+
+	<!-- p95 -->
+	<mybatis-spring:scan
+		base-package="org.doit.ik.mapper" />
+		
+3. prg doit ik persist.. -> org doit ik.mapper 이동
+MemberDAO java		인터페이스만 이동
+NoticeDao java 		인터페이스만 이동
+ >> ~Impl.java 삭제
+ 
+ 
+ 4.src/main/resources 폴더 안에 
+ 	org/doit/ik/mapper 폴더

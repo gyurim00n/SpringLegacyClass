@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="org.doit.ik.mapper.NoticeMapper"> 
+
+    <!-- public int getCount(@Param("field") String field, @Param("query") String query)-->
+    
+    <select id="getCount" resultType="int">
+    	   SELECT COUNT(*) CNT 
+                   FROM NOTICES
+                   WHERE ${field} LIKE : '%${query}%'
+    </select>
+	<!-- public List<NoticeVO> getNotices(@Param("page") int page ,@Param("field")  String field, @Param("query") String query) -->
+	<select id="getNotices" resultType="org.doit.ik.domain.NoticeVO">
+
+      SELECT *
+      FROM (
+               SELECT ROWNUM NUM, N.* 
+               FROM (
+               			SELECT * 
+                        FROM NOTICES 
+                     WHERE ${field} LIKE '%${query}%'
+                     ORDER BY REGDATE DESC
+                               ) N
+               ) 
+               WHERE NUM BETWEEN (1 + (#{page}-1)*15) AND (15 + (#{page}-1)*15)
+	
+	</select>
+
+	<!-- public int delete(String seq)-->
+	<delete id="delete">
+		DELETE FROM notices
+        WHERE seq=#{seq};    
+	</delete>
+	
+	<!-- public int update(NoticeVO noticeVO)-->
+	<update id="update">
+		UPDATE notices
+		SET title= #{title}
+			,content= #{content}
+		<if test="filesrc != null">, filesrc = #{filesrc}</if>
+		WHERE seq = #{seq}
+
+	</update>
+	
+	
+	<!-- public NoticeVO getNotice(String seq)-->
+	<select id="getNotice" resultType="org.doit.ik.domain.NoticeVO">
+		SELECT *
+		FROM notices
+		WHERE seq = #{seq}
+	</select>
+	
+	
+	<!-- public int insert(NoticeVO noticeVO) -->
+	<insert id="insert">
+		<selectKey order="BEFORE"  resultType="String" keyProperty="seq" >
+               SELECT NVL(MAX(TO_NUMBER(SEQ)),0)+1 FROM NOTICES
+		</selectKey>
+				INSERT INTO NOTICES
+               (SEQ, TITLE, CONTENT, WRITER, REGDATE, HIT, FILESRC)
+               VALUES
+               ( #{seq}, #{title}, #{content}, #{writer} , SYSDATE, 0, #{filesrc, javaType=String, jdbcType=VARCHAR} )
+               
+	</insert>
+	
+	<!--  public void hitUp(String seq) -->
+	   <update id="hitUp">
+	   UPDATE notices
+	   SET	hit = hit + 1
+	   WHERE seq = #{seq}
+	   
+	   </update>
+	   
+	   
+	<!-- public int getHit(String seq)-->
+ 	<select id="getHit" resultType="integer">
+ 		SELECT hit
+ 		FROM notices
+ 		 WHERE seq = #{seq}
+ 	</select>
+ </mapper>
+ 
+ 
