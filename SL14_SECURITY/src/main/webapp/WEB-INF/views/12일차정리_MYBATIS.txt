@@ -61,12 +61,307 @@
 
 
 
+____________9.22
+스프링 시큐리티 어제 수업 정리~
+1) pom.xml  
+	ㄴspring-security-web
+	ㄴspring-security-config
+	ㄴspring-security-core
+	ㄴs.s - taglibs <- <> <> 태그
 
+2)security-context.xml 시큐리티 설정 파일 ( 여기엔 시큐리티를 걸지 앟ㄴ겟다.)
+  <security:http pattern="/static/**" security="none"></security:http>   
+   <security:http pattern="/design/**" security="none"></security:http>
+   <security:http pattern="/css/**" security="none"></security:http>
+   <security:http pattern="/js/**" security="none"></security:http> 
+-역할(ROLE) 종류: ROLE_ADMIN, ROLE_MANAGER, ROLE_USER  . . ㄷ등등
+-경로별 접근 제한
+	ㄴ공지사항 글쓰기: 인증 O 권한 X
+	ㄴ공지사항 삭제: 인증 O 권한 관리자 O
+	ㄴ그 외에 누구나 접근 허용.
+<security:http use-expressions="true">
+	<security:intercept-url pattern="/customer/noticeReg.htm" access="isAuthenticated()"/>
+	
+<security:authentication-manag
+<!-- 인증 관리자 : 총괄 책임자  -->
+<security:authentication-manager>
+<!-- 인증 제공자 -->
+<security:authentication-provider>
+<security:user-service>
+<security:user name="admin" authorities="ROLE_ADMIN, ROLE_MANAGER, ROLE_USER" password="{noop}1234"/>
+<security:user name="kenik" authorities="ROLE_USER" password="{noop}1234"/>
 
+</security:user-service>
+		
+</security:authentication-provider>
+</security:authentication-manager>
+3)web.xml
+<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/spring/root-context.xml
+			/WEB-INF/spring/security-context.xml
+		</param-value>
+	</context-param>
+	ㄴDelegatingFilterProxy 필터 추가
+	
+4) 확인 login.jsp post		/login
+	id		name="username"
+	pwd		name="password" (이것들은 기본값이다.)
 
-
-
+5) post 요청 : CSRF 토큰 <form> input type = "hidden" csrf 토큰 추가 
+ajax 요청 시 post 사용시 이거 반드시 필요 (csrf)
+	 <input type="hidden"
+           name="${_csrf.parameterName}"
+           value="${_csrf.token}" />
     
+ 6) 
+ 	로그인 실패시 요청 URL ?error=true
+ 	<c:if test="${ param.error eq true }">
+         <div>
+           <strong style="color:red">아이디 또는 패스워드가 일치하지 않습니다..</strong>
+           <br />
+           <c:if test="${ SPRING_SECURITY_LAST_EXCEPTION  != null }">
+              Message : <c:out   value="${ SPRING_SECURITY_LAST_EXCEPTION.message }" />
+         </c:if>
+        </div>          
+       </c:if>
+    
+    	authentication-failure-url="/joinus/login.htm?error=true"
+	authentication-success-handler-ref="customLoginSuccessHandler"
+    
+  ㄴ403 	인증 o		권한 x
+   401	인증X
+   
+   	    <!--[1] 403  접근 제한이 발생한 경우 ... CommonController(htm요청이기에)-->
+      <!-- <security:access-denied-handler error-page="/common/accessError.htm"/> -->
+   <security:access-denied-handler ref="customAccessDeniedHandler"/>   <--활용도는 이쪽이 더 높다 -->
+   
+   
+   HTTP Request
+     │
+     ▼
+DelegatingFilterProxy
+     │
+     ▼
+FilterChainProxy
+     │
+     ▼
+SecurityFilterChain
+     │
+     ├─ SecurityContextPersistenceFilter
+     │
+     ├─ UsernamePasswordAuthenticationFilter
+     │
+     ├─ ExceptionTranslationFilter
+     │
+     └─ FilterSecurityInterceptor
+             │
+             ▼
+        Controller
+        
+DelegatingFilterProxy: Tomcat + DispatcherServlet(서블릿)	연결(위임)->	스프링시큐리티 필터 체인	->
+FilterChainProxy : 스프링 시큐리티 필터 여러 개 있다..
+	역할에 맞는 스프링 시큐리티 필터 요청 -> 처리... 하는 관리 객체
+Security Context : 스프링 시큐리티에서 인증된 사용자 정보를 저장하는 핵심 공간.
+
+SecurityContextHolder
+        │
+        ▼
+SecurityContext			저장공간(장소)
+        │
+        ▼
+Authentication			(=장소안에 있는 객체)  인터페이스 -> 구현 객체
+        │
+        ├── principal	사용자 정보(아이디)
+        ├── credentials	인증 자격 증명 정보	1234 비밀번호...
+        └── authorities	권한 정보
+
+Authentication auth = SecutrityContextHolder.getContext().getAuthentication();
+auth.getPrincipal()
+auth.getCredentials()
+auth.getAuthorities()
+auth.isAuthenticated()
+auth.getName()
+
+
+UsernamePasswordAuthenticationFilter (로그인 처리시 중요한 필터)
+
+브라우저
+   │
+   │ POST /login
+   ▼
+UsernamePasswordAuthenticationFilter
+   │
+   │ UsernamePasswordAuthenticationToken
+   ▼
+AuthenticationManager
+   │
+   ▼
+ProviderManager
+   │
+   ▼
+DaoAuthenticationProvider
+   │
+   │ loadUserByUsername()
+   ▼
+UserDetailsService
+   │
+   ▼
+   
+     DB
+   │
+   │ 회원정보
+   ▼
+UserDetails
+   │
+   │ 비밀번호 비교	: BCrytPassword
+   ▼
+인증 성공
+   │
+   ▼
+Authentication 생성
+   │
+   ▼
+SecurityContext
+   │
+   ▼
+SecurityContextHolder
+
+_______전체적인 그림_______________
+
+
+┌──────────────┐
+│   Browser    │
+└──────┬───────┘
+       │ HTTP Request
+       ▼
+┌─────────────────────┐
+│       Tomcat        │
+└──────────┬──────────┘
+           ▼
+┌───────────────────────────┐
+│   DelegatingFilterProxy   │
+└────────────┬──────────────┘
+             ▼
+┌───────────────────────────┐
+│     FilterChainProxy      │
+└────────────┬──────────────┘
+             ▼
+┌───────────────────────────┐
+│      Security Filters     │
+│                           │
+│ SecurityContext 관련 Filter│
+│ CsrfFilter                │
+│ UsernamePassword          │
+│ AuthenticationFilter      │
+│ ExceptionTranslationFilter│
+│ FilterSecurityInterceptor │
+└────────────┬──────────────┘
+             │
+             │ 인증
+             ▼
+┌───────────────────────────┐
+│ AuthenticationManager     │
+└────────────┬──────────────┘
+             ▼
+┌───────────────────────────┐
+│ ProviderManager            │
+└────────────┬──────────────┘
+             ▼
+┌───────────────────────────┐
+│ DaoAuthenticationProvider  │
+└────────────┬──────────────┘
+             ▼
+┌───────────────────────────┐
+│ UserDetailsService         │
+└────────────┬──────────────┘
+             ▼
+           DB
+             │
+             ▼
+       UserDetails
+             │
+             ▼
+       Authentication
+             │
+             ▼
+      SecurityContext
+             │
+             ▼
+  SecurityContextHolder
+             │
+             │ 인가
+             ▼
+      권한 검사
+             │
+       ┌─────┴─────┐
+       ▼           ▼
+     허용          거부
+       │           │
+       ▼           ▼
+ Controller       403
  
-     
+ 
+ 
+ 
+ 25. 꼭 기억해야 할 클래스와 메서드
+
+Spring Security 공부에서는 아래 정도를 우선순위로 잡으시면 됩니다.
+
+클래스/인터페이스   핵심 역할   중요 메서드
+DelegatingFilterProxy   Servlet ↔ Spring 연결   doFilter()
+FilterChainProxy   Security Filter Chain 실행   doFilter()
+SecurityContextHolder   현재 인증정보 접근   getContext()
+SecurityContext   Authentication 보관   getAuthentication()
+Authentication   인증 사용자 정보   getPrincipal(), getAuthorities()
+UsernamePasswordAuthenticationFilter   로그인 요청 처리   attemptAuthentication()
+AuthenticationManager   인증 관리자   authenticate()
+ProviderManager   Provider에게 인증 위임   authenticate()
+AuthenticationProvider   실제 인증 수행   authenticate()
+DaoAuthenticationProvider   DB 기반 인증   authenticate()
+UserDetailsService   사용자 조회   loadUserByUsername()
+UserDetails   사용자 정보   getUsername(), getPassword(), getAuthorities()
+PasswordEncoder   비밀번호 검증   matches()
+SecurityContextPersistenceFilter   SecurityContext 저장/복원   doFilter()
+CsrfFilter   CSRF 검사   doFilterInternal()
+ExceptionTranslationFilter   보안 예외 처리   doFilter()
+FilterSecurityInterceptor   URL 접근 권한 검사
+
+
+[통째로 암기]
+① 로그인 요청
+      ↓
+UsernamePasswordAuthenticationFilter
+      ↓
+② Authentication 생성
+      ↓
+UsernamePasswordAuthenticationToken
+      ↓
+③ AuthenticationManager
+      ↓
+ProviderManager
+      ↓
+④ AuthenticationProvider
+      ↓
+DaoAuthenticationProvider
+      ↓
+⑤ UserDetailsService
+      ↓
+DB
+      ↓
+⑥ UserDetails
+      ↓
+⑦ Authentication
+      ↓
+⑧ SecurityContext
+      ↓
+SecurityContextHolder
+
+
+
+
+
+--로그아웃 처리
+1.header.jsp
                   

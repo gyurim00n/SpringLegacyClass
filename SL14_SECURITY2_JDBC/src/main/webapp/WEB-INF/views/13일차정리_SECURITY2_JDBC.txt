@@ -1,0 +1,56 @@
+1.  SL14_SECURITY-> SL14_SECURITY_JDBC2 프로젝트 복사
+
+2. p683 db 사용하여 인증 처리                 
+
+ALTER TABLE MEMBER 
+MODIFY (PWD VARCHAR2(100));
+
+
+CREATE TABLE member_authorities
+(
+    username VARCHAR2(50) 
+  , authority VARCHAR2(50) 
+  , CONSTRAINT FK_memberauthorities_USERNAME  FOREIGN KEY(username) REFERENCES member(id)
+);
+
+SeLECT * From member_authorities;
+
+INSERT INTO  member_authorities
+VALUES ( 'kenik', 'ROLE_USER');
+
+INSERT INTO  member_authorities
+VALUES ( 'admin', 'ROLE_USER');
+INSERT INTO  member_authorities
+VALUES ( 'admin', 'ROLE_MANAGER');
+INSERT INTO  member_authorities
+VALUES ( 'admin', 'ROLE_ADMIN');
+
+COMMIT ;
+
+<!-- PasswordEncoder -->
+<bean id="bCryptPasswordEncoder"
+	class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+
+
+<!-- 인증 관리자 : 총괄 책임자  -->
+<security:authentication-manager>
+	<!-- 인증 제공자 -->
+	<security:authentication-provider>
+		<security:user-service>
+			<security:user name="admin" authorities="ROLE_ADMIN, ROLE_MANAGER, ROLE_USER" password="{noop}1234"/>
+			<security:user name="kenik" authorities="ROLE_USER" password="{noop}1234"/>
+		
+		</security:user-service>
+				<!-- p693 -->
+		<security:jdbc-user-service 
+		data-source-ref="dataSource"
+		users-by-username-query="SELECT id AS USERNAME, pwd AS PASSWORD,  1 as  enabled FROM member WHERE id = ?"
+		authorities-by-username-query="SELECT username , authority  FROM member_authorities WHERE username = ?"
+		/>
+		<security:password-encoder ref="bCryptPasswordEncoder"/>
+	</security:authentication-provider>
+</security:authentication-manager> 
+
+
+-- 회원가입 JoinController.java		join 컨트롤러 메서드 수정

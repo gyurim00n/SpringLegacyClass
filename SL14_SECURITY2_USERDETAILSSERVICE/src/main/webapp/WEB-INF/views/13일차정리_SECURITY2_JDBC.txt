@@ -1,0 +1,11 @@
+1.  SL14_SECURITY-> SL14_SECURITY_JDBC2 프로젝트 복사
+
+2. p697 커스텀 유저 서비스 구현하기***
+
+3.실습
+	1)권한 정보를 저장할 VO; AuthVO.java
+	2)MemberVO 수정
+	3)MemberMapper 인터페이스 와 xml 수정
+	4) UserDetailsService 구현한 클래스 선언 - CustomUserDetailsService
+	5) UserDetails 클래스 선언.
+	org.doit.ik.domain.security.CustomerUser

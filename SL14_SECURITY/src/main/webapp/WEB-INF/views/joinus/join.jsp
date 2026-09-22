@@ -97,6 +97,9 @@
 		<div id="buttonLine">
 			<input class="btn-okay button" type="submit" value="가입" />
 		</div>
+			 <input type="hidden"
+           name="${_csrf.parameterName}"
+           value="${_csrf.token}" />
 	</form>
 </div>
 
