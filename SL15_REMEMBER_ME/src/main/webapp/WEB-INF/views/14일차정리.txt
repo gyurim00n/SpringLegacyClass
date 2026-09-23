@@ -1,0 +1,20 @@
+1.  SL14_SECURITY_JDBC2 -> SL15_REMEMBER_ME 프로젝트 복사
+
+2. 로그인 작성자로 글쓰기 
+
+3. 자동 로그인 == 로그인 기억
+	ㄴ영어로 remember-me
+	ㄴ한번 로그인하면 일정 시간 동안 다시 로그인하지 않아도 되는 기능.
+	ㄴ대부분 쿠키(cookie)를 이용해서 구현
+	ㄴ스프링 시큐리티: DB를 이용하는 형태로 구현 가능
+	ㄴsecurity-context.xml
+	<security:remember-me> 태그 추가 설정
+	ㄴ--기본은 이렇게. 다르게주고싶음 따로 지정해야한다..
+	 create table persistent_logins
+		 (
+		     username varchar2(64) not null
+		   , series varchar2(64) primary key
+		   , token varchar2(64) not null
+		   , last_used date not null   
+		 );
+	

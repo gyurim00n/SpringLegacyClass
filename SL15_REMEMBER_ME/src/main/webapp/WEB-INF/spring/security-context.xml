@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:security="http://www.springframework.org/schema/security"
+   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+      http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+
+   <!-- p682 css, js, image, static(정적) 등등   보안 필터 체인 X -->   
+   <security:http pattern="/static/**" security="none"></security:http>   
+   <security:http pattern="/design/**" security="none"></security:http>
+   <security:http pattern="/css/**" security="none"></security:http>
+   <security:http pattern="/js/**" security="none"></security:http> 
+
+   <!-- 인증 방식 설정 -->
+   <security:http use-expressions="true"> <!-- use-expressions="true" 표현식 사용하겠다는 의미 / 기본값 -->
+    <security:intercept-url pattern="/customer/noticeReg.htm" access="isAuthenticated()"/>
+    <security:intercept-url pattern="/customer/noticeDel.htm" access="hasRole('ROLE_ADMIN')"/>
+    <!-- 위 2개 제외한 모든 요청 -->
+    <security:intercept-url pattern="/**" access="permitAll"/>    
+      <security:form-login 
+         login-page="/joinus/login.htm" default-target-url="/index.htm" 
+         authentication-failure-url="/joinus/login.htm?error=true" authentication-success-handler-ref="customLoginSuccessHandler"
+         username-parameter="username" password-parameter="password" login-processing-url="/login"
+      />
+      
+      <!-- [1] 403 접근 제한이 발생한 경우 ... CommonController(htm요청이기에)-->
+      <!-- <security:access-denied-handler error-page="/common/accessError.htm"/> -->
+      
+      <!-- [2] 403 접근 제한이 발생한 경우 ... org.doit.ik.security.CustomAccessDeniedHandler.java -->
+      <security:access-denied-handler ref="customAccessDeniedHandler"/>
+      
+      <!-- logout-url="/logout" , invalidate-session="true"   기본값(안줘도 됨) -->
+      <security:logout 
+      	logout-url="/joinus/logout.htm" 
+      	logout-success-url="/" 
+      	invalidate-session="true"
+      	delete-cookies="remember-me, JSESSION_ID"
+      />
+      
+      <!-- 
+      쿠키 유효시간:608400초 == 7일 
+      브라우저에 보관되는 쿠키 이름: remember-me-cookie=remember-me(기본값이라 설정할필요x)
+      체크박스의 name속성 설정: 파라미터 이름도 remember-me(기본값이라 설정할필요x)
+      key 속성: 쿠키의 값을 암호화하기 위해 사용되는 키값 key = "g82ng2if..."
+      ====(생략가능)====
+      	user-service-ref="customUserDetailService" 
+      	remember-me-cookie="remember-me"
+      	remember-me-parameter="remember-me"
+      -->
+      <security:remember-me
+      	data-source-ref="dataSource"
+      	token-validity-seconds="608400"
+      />
+      
+   </security:http>
+
+   <!-- PasswordEncoder -->
+   <bean id="bCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+   
+   <!-- 인증관리자 : 총괄 책임자 -->
+   <security:authentication-manager>
+      
+      <!-- 인증 제공자 : 실제 인증 작업 진행 -->
+      <security:authentication-provider user-service-ref="customUserDetailsService">
+        
+         <security:password-encoder ref="bCryptPasswordEncoder" />
+      </security:authentication-provider>
+      
+   </security:authentication-manager>
+
+   <!-- CSRF 필터 <security:csrf disabled="true"/> -->
+   
+   
+   
+   
+   <security:global-method-security
+       pre-post-annotations="enabled" 
+       secured-annotations="enabled"
+    />
+    
+    
+</beans>
